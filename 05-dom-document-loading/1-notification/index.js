@@ -5,7 +5,7 @@ export default class NotificationMessage {
     this.duration = duration;
     this.type = type;
     this.render();
-    this.getButton();
+    this.getNotification();
   }
 
   template() {
@@ -29,17 +29,16 @@ export default class NotificationMessage {
   }
 
   show(target = document.body) {
-    const notificationEl = document.querySelector('.notification');
-    if (notificationEl) {
-      notificationEl.remove();
+    if (this.subElement.notification) {
+      this.subElement.notification.remove();
       clearTimeout(window.timerId);
     }
     target.append(this.element);
     window.timerId = setTimeout(() => this.remove(), this.duration);
   }
 
-  getButton() {
-    this.subElement.button = document.querySelector('#btn1');
+  getNotification() {
+    this.subElement.notification = document.querySelector('.notification');
   }
 
   remove = () => {
