@@ -11,16 +11,8 @@ export default class ColumnChart {
   }
 
   render() {
-    let skeleton;
-    let anotherLink = '';
-
-    if (this.data.length === 0) {
-      skeleton = 'column-chart_loading';
-    }
-
-    if (this.link) {
-      anotherLink = `<a class="column-chart__link" href="${this.link}">View all</a>`;
-    }
+    const skeleton = this.data.length ? '' : 'column-chart_loading';
+    const anotherLink = this.link ? `<a class="column-chart__link" href="${this.link}">View all</a>` : '';
 
     const wrapper = document.createElement('div');
 
@@ -61,7 +53,7 @@ export default class ColumnChart {
 
   getColumnProps(data) {
     const maxValue = Math.max(...data);
-    const scale = 50 / maxValue;
+    const scale = this.chartHeight / maxValue;
 
     return data.map(item => {
       return {
