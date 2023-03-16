@@ -12,7 +12,7 @@ class Tooltip {
     }
   }
 
-  initialize = () => {
+  initialize() {
     document.body.addEventListener('pointerover', this.handler);
 
     document.body.addEventListener('pointerout', () => {
