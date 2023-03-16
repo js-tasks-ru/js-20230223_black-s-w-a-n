@@ -15,10 +15,7 @@ class Tooltip {
   initialize() {
     document.body.addEventListener('pointerover', this.handler);
 
-    document.body.addEventListener('pointerout', () => {
-      this.remove();
-      document.body.removeEventListener('pointermove', this.positioning);
-    });
+    document.body.addEventListener('pointerout', this.remove);
   }
 
   render (closestEl) {
@@ -43,15 +40,18 @@ class Tooltip {
     this.element.style.top = `${(event.clientY / 10 + 5)}%`;
   }
 
-  remove () {
+  remove = () => {
     if (this.element) {
       this.element.remove();
       Tooltip.onlyInstance = null;
+      document.body.removeEventListener('pointermove', this.positioning);
     }
   }
 
-  destroy() {
+  destroy = () => {
     this.remove();
+    document.body.removeEventListener('pointerover', this.handler);
+    document.body.removeEventListener('pointerout', this.remove);
   }
 }
 
