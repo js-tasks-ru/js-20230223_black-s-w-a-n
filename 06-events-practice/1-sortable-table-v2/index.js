@@ -96,11 +96,11 @@ export default class SortableTable {
       }
 
       if (this.lastEvent === event.target) {
-        event.target.dataset.order === 'asc' ? event.target.dataset.order = 'desc' : event.target.dataset.order = 'asc';
+        event.target.dataset.order === 'desc' ? event.target.dataset.order = 'asc' : event.target.dataset.order = 'desc';
 
       } else {
         this.lastEvent.dataset.order = '';
-        event.target.dataset.order = 'asc';
+        event.target.dataset.order = 'desc';
       }
 
       this.lastEvent = event.target;
