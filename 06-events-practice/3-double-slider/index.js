@@ -1,9 +1,6 @@
 export default class DoubleSlider {
   element;
   subElements = {};
-  leftShift;
-  rightShift;
-
   constructor({
     min = 100,
     max = 200,
@@ -18,24 +15,31 @@ export default class DoubleSlider {
     this.range = max - min;
     this.formatValue = formatValue;
     this.selected = selected;
-    this.minPrice = selected.from;
-    this.maxPrice = selected.to;
-    this.leftShift = this.selected.from - this.min;
-    this.rightShift = this.max - this.selected.to;
+    this.getInitialValue();
     this.render();
     this.getSubElements();
     this.initialEventListeners();
 
   }
+
+  getInitialValue() {
+
+    this.minPrice = this.selected.from;
+    this.maxPrice = this.selected.to;
+
+    this.leftShift = (this.selected.from - this.min) / this.range * 100;
+    this.rightShift = 100 - (this.max - this.selected.to) / this.range * 100;
+  }
+
   template() {
 
     return `
       <div class="range-slider">
         <span data-element="from">${this.formatValue(this.selected.from)}</span>
         <div class="range-slider__inner">
-          <span class="range-slider__progress" style="left: ${this.selected.from - this.min}%; right: ${this.max - this.selected.to}%"></span>
-          <span class="range-slider__thumb-left" style="left: ${this.selected.from - this.min}%"></span>
-          <span class="range-slider__thumb-right" style="right: ${this.max - this.selected.to}%"></span>
+          <span class="range-slider__progress" style="left: ${this.leftShift}%; right: ${100 - this.rightShift}%"></span>
+          <span class="range-slider__thumb-left" style="left: ${this.leftShift}%"></span>
+          <span class="range-slider__thumb-right" style="right: ${100 - this.rightShift}%"></span>
         </div>
         <span data-element="to">${this.formatValue(this.selected.to)}</span>
       </div>`;
@@ -80,28 +84,28 @@ export default class DoubleSlider {
   thumbLeft = (event) => {
 
     const sliderLength = this.subElements.rangerSlideInner.getBoundingClientRect().right - this.subElements.rangerSlideInner.getBoundingClientRect().left;
-    this.leftShift = Math.round((event.clientX - this.subElements.rangerSlideInner.getBoundingClientRect().left) / (sliderLength / this.range));
-
+    this.leftShift = Math.round((event.clientX - this.subElements.rangerSlideInner.getBoundingClientRect().left) / sliderLength * 100);
+    console.log(this.leftShift)
     if (this.leftShift < 0) {
       return;
     } else if (this.leftShift > 100) {
       return;
-    } else if (this.leftShift >  this.rightShift) {
+    } else if (this.leftShift > this.rightShift) {
       return;
     } else {
       this.subElements.thumbLeft.style.left = `${this.leftShift}%`;
       this.subElements.progress.style.left = `${this.leftShift}%`;
     }
 
-    this.minPrice = this.leftShift + this.min;
+    this.minPrice = (this.leftShift * this.range / 100) + this.min;
     this.subElements.rangeSlider.firstElementChild.textContent = `${this.formatValue(this.minPrice)}`;
   }
 
   thumbRight = (event) => {
 
     const sliderLength = this.subElements.rangerSlideInner.getBoundingClientRect().right - this.subElements.rangerSlideInner.getBoundingClientRect().left;
-    this.rightShift = Math.round((event.clientX - this.subElements.rangerSlideInner.getBoundingClientRect().left) / (sliderLength / this.range));
-
+    this.rightShift = Math.round((event.clientX - this.subElements.rangerSlideInner.getBoundingClientRect().left) / sliderLength * 100);
+    console.log(this.rightShift)
     if (this.rightShift < this.leftShift) {
       return;
     } else if (this.rightShift > 100) {
@@ -113,7 +117,7 @@ export default class DoubleSlider {
       this.subElements.progress.style.right = `${100 - this.rightShift}%`;
     }
 
-    this.maxPrice = this.rightShift + this.min;
+    this.maxPrice = (this.rightShift * this.range / 100) + this.min;
     this.subElements.rangeSlider.lastElementChild.textContent = `${this.formatValue(this.maxPrice)}`;
   }
 
