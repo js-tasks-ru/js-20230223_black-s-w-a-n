@@ -36,8 +36,9 @@ class Tooltip {
   }
 
   positioning = (event) => {
-    this.element.style.left = `${(event.clientX / 10) - 5}%`;
-    this.element.style.top = `${(event.clientY / 10 + 5)}%`;
+    const shift = 10;
+    this.element.style.left = `${event.clientX / 10 - shift}%`;
+    this.element.style.top = `${event.clientY / 10 + shift}%`;
   }
 
   remove = () => {
