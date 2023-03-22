@@ -60,8 +60,12 @@ export default class ColumnChart {
     this.element.classList.add('column-chart_loading');
 
     const url = `https://course-js.javascript.ru/${this.url}?from=${from.toISOString()}&to=${to.toISOString()}`;
-    let getFetch = await fetch(url);
-    this.data = await getFetch.json();
+    try {
+      let getFetch = await fetch(url);
+      this.data = await getFetch.json();
+    } catch (e) {
+      console.log(e);
+    }
 
     this.element.classList.remove('column-chart_loading');
   }
