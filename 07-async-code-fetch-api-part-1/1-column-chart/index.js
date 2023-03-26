@@ -61,8 +61,7 @@ export default class ColumnChart {
 
     const url = `https://course-js.javascript.ru/${this.url}?from=${from.toISOString()}&to=${to.toISOString()}`;
     try {
-      let getFetch = await fetch(url);
-      this.data = await getFetch.json();
+      this.data = await fetchJson(url);
     } catch (e) {
       console.log(e);
     }
